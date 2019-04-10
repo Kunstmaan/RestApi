@@ -11,8 +11,8 @@
 
 namespace Kunstmaan\Rest\MediaBundle\Controller;
 
-use Doctrine\Bundle\DoctrineBundle\Registry;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\EntityManagerInterface;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\Annotations\QueryParam;
 use FOS\RestBundle\Controller\Annotations\View;
@@ -47,16 +47,16 @@ class MediaController extends AbstractApiController
     /** @var Filesystem */
     private $fileSystem;
 
-    /** @var Registry */
+    /** @var EntityManagerInterface */
     private $doctrine;
 
     /**
      * MediaController constructor.
      * @param MediaManager $mediaManager
      * @param Filesystem   $fileSystem
-     * @param Registry     $doctrine
+     * @param EntityManagerInterface $doctrine
      */
-    public function __construct(MediaManager $mediaManager, FileSystem $fileSystem, Registry $doctrine)
+    public function __construct(MediaManager $mediaManager, FileSystem $fileSystem, EntityManagerInterface $doctrine)
     {
         $this->mediaManager = $mediaManager;
         $this->fileSystem = $fileSystem;

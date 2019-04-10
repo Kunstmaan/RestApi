@@ -2,6 +2,9 @@ services:
     Kunstmaan\Rest\FormBundle\Controller\FormSubmissionController:
         public: true
         arguments:
-            - '@doctrine'
+            - '@doctrine.orm.default_entity_manager'
+            - '@kunstmaan_form.form_mailer'
+            - '@event_dispatcher'
+            - '@validator'
         calls:
             - [setViewHandler, ['@fos_rest.view_handler.default']]
