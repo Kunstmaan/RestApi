@@ -2,6 +2,7 @@ services:
     Kunstmaan\Rest\TranslationsBundle\Service\TranslationService:
         arguments:
             - '@doctrine.orm.entity_manager'
+            - '@kunstmaan_admin.logger'
 
     Kunstmaan\Rest\TranslationsBundle\Controller\TranslationsController:
         public: true
