@@ -74,7 +74,7 @@ class TranslationService
      */
     public function createOrUpdateTranslation(Translation $translation, bool $force = false)
     {
-        $this->logger->debug(sprintf('Starting to import a translation for keyword %s, domain %s, locale %s', $translation->getKeyword(), $translation->getDomain(), $translation->getLocale()));
+        $this->logger->critical(sprintf('Starting to import a translation for keyword %s, domain %s, locale %s', $translation->getKeyword(), $translation->getDomain(), $translation->getLocale()));
         /** @var TranslationRepository $repository */
         $repository = $this->manager->getRepository(Translation::class);
 
@@ -84,14 +84,14 @@ class TranslationService
 
         if (null !== $result) {
 
-            $this->logger->debug(sprintf('We found existing translation in same language with translationId, %s', $result->getTranslationId()));
+            $this->logger->critical(sprintf('We found existing translation in same language with translationId, %s', $result->getTranslationId()));
             if ($result->isDisabled()) {
                 $result->setStatus(Translation::STATUS_ENABLED);
                 $this->manager->flush();
             }
 
             if (true === $force) {
-                $this->logger->debug('Force was true so we updated it anyway');
+                $this->logger->critical('Force was true so we updated it anyway');
                 $model = new TranslationModel();
                 $model->setKeyword($translation->getKeyword());
                 $model->setDomain($translation->getDomain());
@@ -104,7 +104,7 @@ class TranslationService
             return $result;
         }
 
-        $this->logger->debug('No result found so we create a new translation entity');
+        $this->logger->critical('No result found so we create a new translation entity');
         $model = new TranslationModel();
         $model->setKeyword($translation->getKeyword());
         $model->setDomain($translation->getDomain());
@@ -114,11 +114,11 @@ class TranslationService
         $transOtherLocale = $repository->findOneBy(['keyword' => $translation->getKeyword(), 'domain' => $translation->getDomain()]);
         if (null !== $transOtherLocale) {
             // create new translation for existing translation group (Translation ID)
-            $this->logger->debug(sprintf('We found keyword in another language with translationId, %s', $transOtherLocale->getTranslationId()));
+            $this->logger->critical(sprintf('We found keyword in another language with translationId, %s', $transOtherLocale->getTranslationId()));
             $repository->updateTranslations($translation->getTranslationModel(), $transOtherLocale->getTranslationId());
         } else {
             //create new translation and new translation group
-            $this->logger->debug('No version of keyword found in other locale, creating a brand new translation');
+            $this->logger->critical('No version of keyword found in other locale, creating a brand new translation');
             $repository->createTranslations($translation->getTranslationModel());
         }
 
